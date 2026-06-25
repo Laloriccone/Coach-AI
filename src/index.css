@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@400;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Outfit", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  --color-brand-green: #22c55e;
+  --color-brand-blue: #3b82f6;
+  --color-brand-energy: #f59e0b; /* Orange/Yellow */
+  --color-brand-accent: #fbbf24;
+}
+
+/* Base Styles */
+body {
+  @apply bg-slate-50 text-slate-900;
+}
+
+/* Markdown Styles */
+.markdown-body h3 {
+  @apply text-lg font-black italic tracking-tighter uppercase mt-4 mb-2 text-brand-blue;
+}
+
+.markdown-body ul {
+  @apply list-disc list-inside space-y-1 mb-4;
+}
+
+.markdown-body p {
+  @apply mb-3 leading-relaxed;
+}
+
+.markdown-body strong {
+  @apply font-bold text-slate-900;
+}
+
+.markdown-body table {
+  @apply w-full border-collapse my-4 text-xs overflow-hidden rounded-xl border border-slate-200;
+}
+
+.markdown-body th {
+  @apply bg-slate-100 text-slate-500 font-mono uppercase tracking-widest p-3 text-left;
+}
+
+.markdown-body td {
+  @apply border border-slate-100 p-3 text-left;
+}
+
+.markdown-body blockquote {
+  @apply border-l-4 border-brand-green pl-4 italic my-4 text-slate-500;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
