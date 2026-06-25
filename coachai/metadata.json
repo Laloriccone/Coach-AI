@@ -1,0 +1,8 @@
+{
+  "name": "CoachAI",
+  "description": "CoachAI es una plataforma de inteligencia artificial diseñada para optimizar el rendimiento físico, deportivo y personal mediante una experiencia conversacional avanzada.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
