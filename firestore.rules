@@ -1,0 +1,62 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // 1. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 2. Global Helper Functions
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidUser(data) {
+      return data.xp is int && data.xp >= 0
+        && data.level is int && data.level > 0
+        && data.streak is int && data.streak >= 0
+        && data.tier is string && (data.tier == 'FREE' || data.tier == 'PREMIUM')
+        && data.isOnboarded is bool
+        && data.subscriptionType is string;
+    }
+
+    function isValidMessage(data) {
+      return data.role is string && (data.role == 'user' || data.role == 'model')
+        && data.content is string && data.content.size() <= 10000
+        && data.timestamp is int;
+    }
+
+    // 3. Collection: users/{userId}
+    match /users/{userId} {
+      allow get: if isOwner(userId) && isValidId(userId);
+      allow create: if isOwner(userId) && isValidId(userId) && isValidUser(incoming());
+      allow update: if isOwner(userId) && isValidId(userId) && isValidUser(incoming());
+      allow delete: if isOwner(userId) && isValidId(userId);
+
+      // Subcollection: messages/{messageId}
+      match /messages/{messageId} {
+        allow get, list: if isOwner(userId) && isValidId(userId);
+        allow create: if isOwner(userId) && isValidId(userId) && isValidId(messageId) && isValidMessage(incoming());
+        allow update: if isOwner(userId) && isValidId(userId) && isValidId(messageId) && isValidMessage(incoming());
+        allow delete: if isOwner(userId) && isValidId(userId) && isValidId(messageId);
+      }
+    }
+  }
+}

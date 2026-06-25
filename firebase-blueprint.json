@@ -1,0 +1,103 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Athlete personal profile attributes",
+      "type": "object",
+      "properties": {
+        "sport": { "type": "string" },
+        "frequency": { "type": "string" },
+        "hardParts": { "type": "array" },
+        "dietaryPreference": { "type": "string" },
+        "weightTarget": { "type": "number" },
+        "activityLevel": { "type": "string" },
+        "age": { "type": "number" },
+        "height": { "type": "number" }
+      }
+    },
+    "Workout": {
+      "title": "Workout",
+      "description": "Represents a completed workout session",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string" },
+        "duration": { "type": "number" },
+        "intensity": { "type": "string", "enum": ["low", "medium", "high"] },
+        "date": { "type": "number" }
+      },
+      "required": ["id", "type", "duration", "intensity", "date"]
+    },
+    "DeviceConfig": {
+      "title": "DeviceConfig",
+      "description": "Smart tracker config",
+      "type": "object",
+      "properties": {
+        "hasDevice": { "type": "boolean" },
+        "brand": { "type": "string" },
+        "model": { "type": "string" },
+        "batteryStatus": { "type": "number" },
+        "useDaily": { "type": "boolean" },
+        "primaryMetrics": { "type": "array" },
+        "isConnected": { "type": "boolean" }
+      }
+    },
+    "TrainingConfig": {
+      "title": "TrainingConfig",
+      "description": "Training source and settings",
+      "type": "object",
+      "properties": {
+        "frequency": { "type": "string" },
+        "type": { "type": "string" },
+        "routineSource": { "type": "string" },
+        "routineData": { "type": "string" }
+      }
+    },
+    "User": {
+      "title": "User",
+      "description": "Athlete's unified profile, goals, active metrics and sheets state",
+      "type": "object",
+      "properties": {
+        "xp": { "type": "number" },
+        "level": { "type": "number" },
+        "streak": { "type": "number" },
+        "tier": { "type": "string", "enum": ["FREE", "PREMIUM"] },
+        "isOnboarded": { "type": "boolean" },
+        "trialStartDate": { "type": "number" },
+        "subscriptionType": { "type": "string" },
+        "goal": { "type": "string" },
+        "dailyCalories": { "type": "number" },
+        "weight": { "type": "number" },
+        "workouts": { "type": "array" },
+        "profile": { "$ref": "UserProfile" },
+        "device": { "$ref": "DeviceConfig" },
+        "training": { "$ref": "TrainingConfig" },
+        "linkedSheetId": { "type": "string" },
+        "linkedSheetUrl": { "type": "string" },
+        "lastSyncTime": { "type": "string" }
+      },
+      "required": ["xp", "level", "streak", "tier", "isOnboarded", "subscriptionType"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "Chat log exchanged with AI Coach",
+      "type": "object",
+      "properties": {
+        "role": { "type": "string", "enum": ["user", "model"] },
+        "content": { "type": "string" },
+        "timestamp": { "type": "number" }
+      },
+      "required": ["role", "content", "timestamp"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "User",
+      "description": "Document holding athlete progress, goals, stats, plan preferences and sheets state"
+    },
+    "users/{userId}/messages/{messageId}": {
+      "schema": "Message",
+      "description": "User conversation logs with AI Coach"
+    }
+  }
+}
